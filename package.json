@@ -1,0 +1,31 @@
+{
+  "name": "gitgalaxy",
+  "version": "1.0.0",
+  "description": "Explore remarkable open-source projects in an interactive 3D universe.",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "test": "pnpm --filter web test",
+    "test:ui": "pnpm --filter web test:ui",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "preview": "pnpm --filter web preview"
+  },
+  "keywords": [
+    "github",
+    "open-source",
+    "threejs",
+    "visualization"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.0.1",
+      "onFail": "download"
+    }
+  },
+  "type": "module"
+}
