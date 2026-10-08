@@ -1,0 +1,10 @@
+{
+  "name": "@gitgalaxy/collector",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=../../.env src/index.ts",
+    "test": "node --test src/**/*.test.ts"
+  }
+}

@@ -10,7 +10,9 @@
     "test": "pnpm --filter web test",
     "test:ui": "pnpm --filter web test:ui",
     "test:e2e": "pnpm --filter web test:e2e",
-    "preview": "pnpm --filter web preview"
+    "preview": "pnpm --filter web preview",
+    "collect": "node --env-file-if-exists=.env scripts/collector/src/index.ts",
+    "collect:test": "node --test scripts/collector/src/**/*.test.ts"
   },
   "keywords": [
     "github",
