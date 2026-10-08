@@ -1,32 +1,39 @@
-# React + TypeScript + Vite
+# GitGalaxy Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+GitGalaxy Web 是项目的 React 和 Three.js 前端。当前阶段使用确定性模拟数据验证三维场景、相机控制、恒星选择和响应式界面，真实 GitHub 数据将在第二阶段接入。
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 22.12 或更高版本
+- pnpm
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+在仓库根目录运行：
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+pnpm install
+pnpm dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+默认开发地址为 `http://localhost:5173`。
+
+## Quality checks
+
+```bash
+pnpm build
+pnpm lint
+pnpm test
+pnpm test:e2e
+```
+
+## Current scene controls
+
+- 鼠标或触控拖动：旋转视角
+- 滚轮或双指：缩放视角
+- 点击恒星：查看模拟 Repository 信息
+- Reset View：恢复初始视角并清除选择
+
+## Data status
+
+`src/galaxy/data/demoStars.ts` 目前生成固定的模拟数据。该文件不会请求 GitHub，也不包含任何 Token。第二阶段将用 Collector 生成的 `public/data/universe.json` 替换模拟数据。

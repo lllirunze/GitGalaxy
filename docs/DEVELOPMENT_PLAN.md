@@ -409,13 +409,33 @@ pnpm add -D eslint prettier typescript vitest @testing-library/react playwright
 
 ### 7.3 GitHub 配置
 
-本地 Collector 需要 GitHub Token。只在本地 `.env` 或 GitHub Actions Secrets 中保存，不得提交到仓库：
+本地 Collector 需要 GitHub Token。所有真实 Token、访问密钥、私钥及其他凭据都属于机密信息，只能保存在本地环境文件或 GitHub Actions Secrets 中，禁止写入源码、配置示例、日志、测试快照和生成数据，禁止提交到 Git 仓库。
+
+本地真实配置写入 `.env`：
 
 ```text
-GITHUB_TOKEN=your_token_here
+GITHUB_TOKEN=实际令牌
 ```
 
-仓库需要开启 GitHub Pages，并为 Actions 配置最小权限。Collector 读取环境变量，`.env.example` 只保留变量名和说明。
+版本控制规则：
+
+- `.env`、`.env.local`、`.env.*` 等真实环境文件必须由 `.gitignore` 排除。
+- `.env.example` 可以提交，用于说明所需变量，但只能包含变量名、用途说明和安全的非机密默认值。
+- `.env.example` 中不得出现真实 Token，也不应使用看起来像真实凭据的示例字符串。
+- GitHub Actions 使用仓库或环境级 Secrets，例如 `${{ secrets.GITHUB_TOKEN }}`，不得把 Secret 直接写入 Workflow 文件。
+- Collector 和 CI 日志不得打印 Token、完整 Authorization Header 或其他凭据。
+- 提交前应执行 `git status` 和 `git diff --cached`，确认没有环境文件或凭据进入暂存区。
+- 如果凭据被误提交，应立即在 GitHub 撤销或轮换；仅删除 Git 历史中的文本不足以恢复安全。
+
+仓库根目录保留可提交的 `.env.example`：
+
+```text
+# GitHub API credential used by the local data collector.
+# Copy this file to .env and set the value locally. Never commit .env.
+GITHUB_TOKEN=
+```
+
+仓库需要开启 GitHub Pages，并为 Actions 配置最小权限。Collector 只通过环境变量读取凭据，不接受硬编码 Token。
 
 ## 8 开发阶段与里程碑
 
