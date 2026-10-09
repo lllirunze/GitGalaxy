@@ -1,14 +1,16 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { SceneStatus } from "@/components/layout/SceneStatus";
 import { TopBar } from "@/components/layout/TopBar";
+import { QualityControl } from "@/components/layout/QualityControl";
 import { RepositoryPreview } from "@/components/discovery/RepositoryPreview";
 import { SearchPanel } from "@/components/discovery/SearchPanel";
 import { UniverseCanvas } from "@/galaxy/components/UniverseCanvas";
 import { useWebGLSupport } from "@/hooks/useWebGLSupport";
 import { useUniverseData } from "@/hooks/useUniverseData";
 import { useGalaxyStore } from "@/stores/useGalaxyStore";
+import { resolveQuality } from "@/galaxy/utils/quality";
 import "./App.css";
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
   const selectedStarId = useGalaxyStore((state) => state.selectedStarId);
   const isSearchOpen = useGalaxyStore((state) => state.isSearchOpen);
   const setSearchOpen = useGalaxyStore((state) => state.setSearchOpen);
+  const qualityMode = useGalaxyStore((state) => state.quality);
+  const quality = useMemo(() => resolveQuality(qualityMode, universe.total), [qualityMode, universe.total]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -39,7 +43,7 @@ function App() {
         {supportsWebGL ? (
           <ErrorBoundary>
             <Suspense fallback={<SceneStatus message="正在构建星图" />}>
-              <UniverseCanvas onReady={() => setSceneReady(true)} stars={universe.stars} />
+              <UniverseCanvas onReady={() => setSceneReady(true)} stars={universe.stars} quality={quality.settings} />
             </Suspense>
             {!sceneReady && <SceneStatus message="正在点亮开源宇宙" />}
           </ErrorBoundary>
@@ -60,6 +64,7 @@ function App() {
         <span><i className="legend-dot legend-dot--green" />Python</span>
       </div>
       <div className="interaction-hint" aria-hidden="true"><span className="mouse-icon" />拖动旋转 · 滚轮缩放 · 点击恒星</div>
+      <QualityControl effectiveQuality={quality.level} />
       {error && <p className="data-warning" role="status">数据加载失败，已切换为模拟星图。</p>}
       {isSearchOpen && <SearchPanel stars={universe.stars} />}
       {selectedStarId !== null && <RepositoryPreview stars={universe.stars} source={source} />}
