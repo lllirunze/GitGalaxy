@@ -1,0 +1,56 @@
+name: Update Universe Data
+
+on:
+  schedule:
+    - cron: "0 2 * * 1"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Target repository count"
+        default: "500"
+        required: false
+        type: choice
+        options: ["100", "500", "1000", "5000"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: universe-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/setup@v3
+        with:
+          version: 11
+          runtime: node@24
+          cache: true
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm collect
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_COLLECTOR_TOKEN || github.token }}
+          COLLECTOR_TARGET: ${{ inputs.target || '500' }}
+      - run: pnpm collect:test
+      - uses: actions/configure-pages@v5
+      - name: Commit refreshed universe data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/web/public/data/universe.json
+          git diff --cached --quiet || git commit -m "chore(data): refresh universe"
+          git push
+      - run: pnpm build
+        env:
+          GITHUB_PAGES: "true"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
