@@ -1,7 +1,7 @@
 export const GALAXY_CONFIG = {
   demoStarCount: 180,
   backgroundStarCount: 3200,
-  camera: { initialPosition: [0, 5, 30] as const, minDistance: 11, maxDistance: 62 },
+  camera: { initialPosition: [0, 14, 142] as const, minDistance: 18, maxDistance: 240 },
   starFieldRadius: 22,
 } as const;
 

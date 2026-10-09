@@ -6,23 +6,25 @@ import { TopBar } from "@/components/layout/TopBar";
 import { RepositoryPreview } from "@/components/discovery/RepositoryPreview";
 import { UniverseCanvas } from "@/galaxy/components/UniverseCanvas";
 import { useWebGLSupport } from "@/hooks/useWebGLSupport";
+import { useUniverseData } from "@/hooks/useUniverseData";
 import { useGalaxyStore } from "@/stores/useGalaxyStore";
 import "./App.css";
 
 function App() {
   const supportsWebGL = useWebGLSupport();
+  const { universe, source, isLoading, error } = useUniverseData();
   const [sceneReady, setSceneReady] = useState(false);
   const selectedStarId = useGalaxyStore((state) => state.selectedStarId);
 
   return (
     <main className="app-shell">
       <div className="cosmic-noise" aria-hidden="true" />
-      <TopBar />
+      <TopBar source={source} />
       <section className="universe-stage" aria-label="GitGalaxy 三维宇宙">
         {supportsWebGL ? (
           <ErrorBoundary>
             <Suspense fallback={<SceneStatus message="正在构建星图" />}>
-              <UniverseCanvas onReady={() => setSceneReady(true)} />
+              <UniverseCanvas onReady={() => setSceneReady(true)} stars={universe.stars} />
             </Suspense>
             {!sceneReady && <SceneStatus message="正在点亮开源宇宙" />}
           </ErrorBoundary>
@@ -34,7 +36,7 @@ function App() {
       <motion.section className="intro-copy" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.15 }} aria-labelledby="intro-title">
         <p className="eyebrow">OPEN SOURCE OBSERVATORY</p>
         <h1 id="intro-title">Explore the code<span>beyond the list.</span></h1>
-        <p className="intro-description">每一颗恒星都将代表一个值得探索的开源项目。现在展示的是第一阶段的确定性模拟星图。</p>
+        <p className="intro-description">{isLoading ? "正在载入开源项目星图。" : source === "live" ? `当前星图包含 ${universe.total.toLocaleString()} 个来自 GitHub 的开源项目。` : "未找到有效的项目数据，当前展示确定性模拟星图。"}</p>
       </motion.section>
 
       <div className="scene-legend" aria-label="场景图例">
@@ -43,7 +45,8 @@ function App() {
         <span><i className="legend-dot legend-dot--green" />Python</span>
       </div>
       <div className="interaction-hint" aria-hidden="true"><span className="mouse-icon" />拖动旋转 · 滚轮缩放 · 点击恒星</div>
-      {selectedStarId !== null && <RepositoryPreview />}
+      {error && <p className="data-warning" role="status">数据加载失败，已切换为模拟星图。</p>}
+      {selectedStarId !== null && <RepositoryPreview stars={universe.stars} source={source} />}
     </main>
   );
 }
