@@ -16,8 +16,8 @@ export interface QualitySettings {
 
 export const QUALITY_SETTINGS: Record<QualityLevel, QualitySettings> = {
   low: { dpr: [1, 1], backgroundStars: 900, nebulaParticles: 0, antialias: false },
-  medium: { dpr: [1, 1.35], backgroundStars: 1_800, nebulaParticles: 90, antialias: true },
-  high: { dpr: [1, 1.75], backgroundStars: GALAXY_CONFIG.backgroundStarCount, nebulaParticles: 220, antialias: true },
+  medium: { dpr: [1, 1.35], backgroundStars: 1_800, nebulaParticles: 90, antialias: false },
+  high: { dpr: [1, 1.75], backgroundStars: GALAXY_CONFIG.backgroundStarCount, nebulaParticles: 220, antialias: false },
 };
 
 export const LANGUAGE_COLORS = {

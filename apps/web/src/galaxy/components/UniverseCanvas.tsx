@@ -5,13 +5,16 @@ import { RepositoryStars } from "@/galaxy/components/RepositoryStars";
 import type { GalaxyStar } from "@/types/galaxy";
 import type { QualitySettings } from "@/galaxy/config";
 import { SpaceEnvironment } from "@/galaxy/components/SpaceEnvironment";
+import { PostEffects } from "@/galaxy/components/PostEffects";
+import type { QualityLevel } from "@/galaxy/config";
 
-export function UniverseCanvas({ onReady, stars, quality }: { onReady: () => void; stars: GalaxyStar[]; quality: QualitySettings }) {
+export function UniverseCanvas({ onReady, stars, quality, qualityLevel }: { onReady: () => void; stars: GalaxyStar[]; quality: QualitySettings; qualityLevel: QualityLevel }) {
   return <Canvas className="universe-canvas" camera={{ position: [...GALAXY_CONFIG.camera.initialPosition], fov: 52, near: .1, far: 260 }} dpr={quality.dpr} gl={{ antialias: quality.antialias, alpha: true, powerPreference: "high-performance" }} onCreated={({ gl }) => { gl.setClearColor("#02040b", 0); onReady(); }}>
     <fog attach="fog" args={["#02040b", 42, 105]} />
     <ambientLight intensity={.25} />
     <SpaceEnvironment quality={quality} />
     <RepositoryStars stars={stars} />
     <CameraController stars={stars} />
+    <PostEffects quality={qualityLevel} />
   </Canvas>;
 }

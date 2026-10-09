@@ -43,7 +43,7 @@ function App() {
         {supportsWebGL ? (
           <ErrorBoundary>
             <Suspense fallback={<SceneStatus message="正在构建星图" />}>
-              <UniverseCanvas onReady={() => setSceneReady(true)} stars={universe.stars} quality={quality.settings} />
+              <UniverseCanvas onReady={() => setSceneReady(true)} stars={universe.stars} quality={quality.settings} qualityLevel={quality.level} />
             </Suspense>
             {!sceneReady && <SceneStatus message="正在点亮开源宇宙" />}
           </ErrorBoundary>
