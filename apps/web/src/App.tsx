@@ -1,9 +1,10 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { SceneStatus } from "@/components/layout/SceneStatus";
 import { TopBar } from "@/components/layout/TopBar";
 import { RepositoryPreview } from "@/components/discovery/RepositoryPreview";
+import { SearchPanel } from "@/components/discovery/SearchPanel";
 import { UniverseCanvas } from "@/galaxy/components/UniverseCanvas";
 import { useWebGLSupport } from "@/hooks/useWebGLSupport";
 import { useUniverseData } from "@/hooks/useUniverseData";
@@ -15,6 +16,20 @@ function App() {
   const { universe, source, isLoading, error } = useUniverseData();
   const [sceneReady, setSceneReady] = useState(false);
   const selectedStarId = useGalaxyStore((state) => state.selectedStarId);
+  const isSearchOpen = useGalaxyStore((state) => state.isSearchOpen);
+  const setSearchOpen = useGalaxyStore((state) => state.setSearchOpen);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+      if (event.key === "Escape" && isSearchOpen) setSearchOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isSearchOpen, setSearchOpen]);
 
   return (
     <main className="app-shell">
@@ -46,6 +61,7 @@ function App() {
       </div>
       <div className="interaction-hint" aria-hidden="true"><span className="mouse-icon" />拖动旋转 · 滚轮缩放 · 点击恒星</div>
       {error && <p className="data-warning" role="status">数据加载失败，已切换为模拟星图。</p>}
+      {isSearchOpen && <SearchPanel stars={universe.stars} />}
       {selectedStarId !== null && <RepositoryPreview stars={universe.stars} source={source} />}
     </main>
   );
