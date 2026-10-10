@@ -36,6 +36,10 @@ Copy `.env.example` to `.env`, supply a GitHub Token locally, and run `pnpm coll
 
 GitHub Actions runs verification on pushes and pull requests, deploys `master` to GitHub Pages, and refreshes Universe data weekly. Configure the repository Pages source as **GitHub Actions**. Optionally set `GH_COLLECTOR_TOKEN` as a repository secret to give scheduled collection its own least-privilege token.
 
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. The V1.0 release checklist is available at [docs/v1.0.0-release-checklist.md](docs/v1.0.0-release-checklist.md). See [docs/README.md](docs/README.md) for the documentation versioning convention.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
