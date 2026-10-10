@@ -7,7 +7,7 @@ on:
     inputs:
       target:
         description: "Target repository count"
-        default: "500"
+        default: "5000"
         required: false
         type: choice
         options: ["100", "500", "1000", "5000"]
@@ -36,7 +36,7 @@ jobs:
       - run: pnpm collect
         env:
           GITHUB_TOKEN: ${{ secrets.GH_COLLECTOR_TOKEN || github.token }}
-          COLLECTOR_TARGET: ${{ inputs.target || '500' }}
+          COLLECTOR_TARGET: ${{ inputs.target || '5000' }}
       - run: pnpm collect:test
       - uses: actions/configure-pages@v5
       - name: Commit refreshed universe data

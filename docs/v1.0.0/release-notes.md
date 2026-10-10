@@ -24,5 +24,5 @@ GitGalaxy v1.0.0 是首个公开版本：将精选 GitHub 开源项目呈现在�
 ## Links
 
 - Live Demo：发布后补充 GitHub Pages URL
-- Development Plan：[`docs/v1.0.0-development-plan.md`](v1.0.0-development-plan.md)
+- Development Plan：[`docs/v1.0.0/development-plan.md`](development-plan.md)
 - Contribution Guide：[`CONTRIBUTING.md`](../CONTRIBUTING.md)
