@@ -64,18 +64,6 @@ GitGalaxy V1.0.0 has completed release validation: the 5,000-record Universe, pe
 | Testing | Vitest, Playwright |
 | Delivery | GitHub Actions, GitHub Pages |
 
-## 🗺️ How it works
-
-```mermaid
-flowchart LR
-  A[GitHub public API] --> B[Collector]
-  B --> C[Validated Universe data]
-  C --> D[3D galaxy]
-  D --> E[Search · Focus · Explore]
-```
-
-The collector filters, scores, de-duplicates, and assigns stable coordinates to repositories. The web app then renders that data as a static, interactive galaxy—no always-on backend required.
-
 ## 🚀 Getting started
 
 ```bash
