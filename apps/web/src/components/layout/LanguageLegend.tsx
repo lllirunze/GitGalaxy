@@ -33,7 +33,7 @@ export function LanguageLegend({ stars }: { stars: GalaxyStar[] }) {
       })}
     </div>
     <footer className="language-legend__actions">
-      <button type="button" className="language-legend__toggle" onClick={() => setExpanded((expanded) => !expanded)} aria-expanded={isExpanded}>{isExpanded ? "Show less" : `Show all · ${languages.length}`}</button>
+      <button type="button" className="language-legend__toggle" data-testid="language-legend-toggle" onClick={() => setExpanded((expanded) => !expanded)} aria-expanded={isExpanded}>{isExpanded ? "Show less" : `Show all · ${languages.length}`}</button>
       {hiddenLanguages.length ? <button type="button" className="language-legend__quick-action" onClick={showAllLanguages}>Select all</button> : <button type="button" className="language-legend__quick-action" onClick={() => { selectStar(null); hideAllLanguages(allLanguages); }}>Hide all</button>}
     </footer>
   </section>;

@@ -25,7 +25,7 @@ test("opens search with the keyboard shortcut", async ({ page }) => {
 test("expands the data-driven language legend", async ({ page }) => {
   await page.goto("/");
   const legend = page.getByRole("region", { name: "编程语言颜色图例" });
-  await legend.getByRole("button", { name: /languages/i }).click();
-  await expect(legend.locator('span[title^="Go: "]')).toBeVisible();
-  await expect(legend.locator('span[title^="C: "]')).toBeVisible();
+  await legend.getByTestId("language-legend-toggle").click();
+  await expect(legend.locator('label[title^="Go: "]')).toBeVisible();
+  await expect(legend.locator('label[title^="C: "]')).toBeVisible();
 });
