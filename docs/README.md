@@ -35,3 +35,12 @@ V1.0.0 发布后，项目进入稳定维护线，后续版本仅使用补丁版�
 - [V1.0.0 开发计划](v1.0.0/development-plan.md)
 - [V1.0.0 发布验收清单](v1.0.0/release-checklist.md)
 - [V1.0.0 发布说明](v1.0.0/release-notes.md)
+
+## 已规划版本
+
+- [V1.0.1 优化计划](v1.0.1/development-plan.md)
+- [V1.0.1 发布验收清单](v1.0.1/release-checklist.md)
+- [V1.0.1 发布说明草案](v1.0.1/release-notes.md)
+- [V1.0.2 优化计划](v1.0.2/development-plan.md)
+- [V1.0.2 发布验收清单](v1.0.2/release-checklist.md)
+- [V1.0.2 发布说明草案](v1.0.2/release-notes.md)

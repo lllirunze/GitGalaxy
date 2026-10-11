@@ -129,6 +129,19 @@ Each version owns a separate documentation directory. The current release materi
 - The 5,000-record Universe and performance verification passed the formal release gate.
 - See the [release notes](docs/v1.0.0/release-notes.md) and [release checklist](docs/v1.0.0/release-checklist.md).
 
+### v1.0.1 — Planned 2026-10-11
+
+- Replace the default browser tab icon with a GitGalaxy favicon.
+- Keep Galaxy density consistent as the Universe grows from 100 to 5,000 repositories.
+- Expand the language-color legend to represent every collected primary language.
+- See the [V1.0.1 optimization plan](docs/v1.0.1/development-plan.md).
+
+### v1.0.2 — Planned 2026-10-11
+
+- Make initial production rendering show correct star colors without requiring a refresh.
+- Collect candidates through bounded, rate-aware concurrency while centrally de-duplicating by Repository ID.
+- See the [V1.0.2 optimization plan](docs/v1.0.2/development-plan.md).
+
 ## 🤝 Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request.
