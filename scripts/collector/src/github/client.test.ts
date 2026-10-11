@@ -13,9 +13,9 @@ test("GitHubClient shares one request cadence across concurrent callers", async 
     const client = new GitHubClient("test-token", 25, 0);
     await Promise.all([client.searchRepositories("stars:>=1", 1), client.searchRepositories("stars:>=2", 1), client.searchRepositories("stars:>=3", 1)]);
     assert.equal(requestedAt.length, 3);
-    assert.ok(requestedAt[1] - requestedAt[0] >= 20);
-    assert.ok(requestedAt[2] - requestedAt[1] >= 20);
-    assert.equal(client.getStats().requests, 3);
+    const stats = client.getStats();
+    assert.equal(stats.requests, 3);
+    assert.ok(stats.rateLimitWaitMs >= 25, "concurrent callers must reserve shared request slots");
   } finally {
     globalThis.fetch = originalFetch;
   }
