@@ -4,8 +4,8 @@ import { demoUniverse, loadUniverse } from "@/galaxy/data/universe";
 import type { UniverseData } from "@/types/galaxy";
 
 export interface UniverseState {
-  universe: UniverseData;
-  source: "live" | "demo";
+  universe: UniverseData | null;
+  source: "live" | "demo" | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -13,7 +13,7 @@ export interface UniverseState {
 const fallbackUniverse = demoUniverse(DEMO_STARS);
 
 export function useUniverseData(): UniverseState {
-  const [state, setState] = useState<UniverseState>({ universe: fallbackUniverse, source: "demo", isLoading: true, error: null });
+  const [state, setState] = useState<UniverseState>({ universe: null, source: null, isLoading: true, error: null });
   useEffect(() => {
     let active = true;
     loadUniverse()

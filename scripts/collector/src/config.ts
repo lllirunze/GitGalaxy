@@ -17,6 +17,7 @@ export interface CollectorConfig {
   output: string;
   requestDelayMs: number;
   maxRetries: number;
+  concurrency: number;
 }
 
 export function loadConfig(): CollectorConfig {
@@ -29,5 +30,6 @@ export function loadConfig(): CollectorConfig {
     output: resolve(process.cwd(), process.env.COLLECTOR_OUTPUT || "apps/web/public/data/universe.json"),
     requestDelayMs: integer("COLLECTOR_REQUEST_DELAY_MS", 2_100, 100, 30_000),
     maxRetries: integer("COLLECTOR_MAX_RETRIES", 3, 0, 8),
+    concurrency: integer("COLLECTOR_CONCURRENCY", 4, 1, 8),
   };
 }

@@ -12,7 +12,10 @@ interface SearchResponse {
 const wait = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 export class GitHubClient {
-  #lastRequestAt = 0;
+  #nextRequestAt = 0;
+  #blockedUntil = 0;
+  #waitedMs = 0;
+  #requestCount = 0;
   #token: string;
   #delayMs: number;
   #maxRetries: number;
@@ -32,9 +35,8 @@ export class GitHubClient {
 
   async #request<T>(path: string): Promise<T> {
     for (let attempt = 0; attempt <= this.#maxRetries; attempt += 1) {
-      const elapsed = Date.now() - this.#lastRequestAt;
-      if (elapsed < this.#delayMs) await wait(this.#delayMs - elapsed);
-      this.#lastRequestAt = Date.now();
+      await this.#acquireRequestSlot();
+      this.#requestCount += 1;
 
       const response = await fetch(`${API_ROOT}${path}`, { headers: {
         Accept: "application/vnd.github+json",
@@ -43,6 +45,7 @@ export class GitHubClient {
         "User-Agent": "GitGalaxy-Collector/1.0",
       } });
 
+      this.#observeRateLimit(response);
       if (response.ok) return await response.json() as T;
       if (response.status === 401) throw new Error("GitHub rejected GITHUB_TOKEN. Check that it is valid.");
 
@@ -62,5 +65,25 @@ export class GitHubClient {
       await wait(delay);
     }
     throw new Error("GitHub request retry loop ended unexpectedly");
+  }
+
+  getStats() { return { requests: this.#requestCount, rateLimitWaitMs: this.#waitedMs }; }
+
+  async #acquireRequestSlot() {
+    const now = Date.now();
+    const scheduledAt = Math.max(now, this.#nextRequestAt, this.#blockedUntil);
+    this.#nextRequestAt = scheduledAt + this.#delayMs;
+    if (scheduledAt > now) {
+      this.#waitedMs += scheduledAt - now;
+      await wait(scheduledAt - now);
+    }
+  }
+
+  #observeRateLimit(response: Response) {
+    const remaining = Number(response.headers.get("x-ratelimit-remaining"));
+    const reset = Number(response.headers.get("x-ratelimit-reset"));
+    const retryAfter = Number(response.headers.get("retry-after"));
+    if (Number.isFinite(retryAfter) && retryAfter > 0) this.#blockedUntil = Math.max(this.#blockedUntil, Date.now() + retryAfter * 1_000);
+    else if (remaining === 0 && Number.isFinite(reset)) this.#blockedUntil = Math.max(this.#blockedUntil, reset * 1_000 + 1_000);
   }
 }

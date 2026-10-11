@@ -30,7 +30,7 @@ function demoToGalaxyStar(repository: DemoRepository): GalaxyStar {
 }
 
 export async function loadUniverse(): Promise<UniverseData> {
-  const response = await fetch(`${import.meta.env.BASE_URL}data/universe.json`, { headers: { Accept: "application/json" } });
+  const response = await fetch(`${import.meta.env.BASE_URL}data/universe.json`, { cache: "no-cache", headers: { Accept: "application/json" } });
   if (!response.ok) throw new Error(`Universe data request failed with ${response.status}`);
   return universeSchema.parse(await response.json()) as UniverseData;
 }

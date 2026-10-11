@@ -3,7 +3,7 @@ import { dirname } from "node:path";
 import { loadConfig } from "./config.ts";
 import { GitHubClient } from "./github/client.ts";
 import { buildSearchQueries } from "./github/queries.ts";
-import { deduplicate, isEligible, normalizeRepository } from "./filters/repositories.ts";
+import { isEligible, normalizeRepository } from "./filters/repositories.ts";
 import { scoreRepositories } from "./scoring/score.ts";
 import { selectDiverse } from "./scoring/select.ts";
 import { generateUniverse } from "./generators/universe.ts";
@@ -27,21 +27,28 @@ async function atomicWrite(path: string, data: unknown) {
 async function main() {
   const config = loadConfig();
   const client = new GitHubClient(config.token, config.requestDelayMs, config.maxRetries);
-  const raw: GitHubRepository[] = [];
+  const candidates = new Map<number, GitHubRepository>();
   const desiredCandidates = Math.min(config.target * 3, 15_000);
+  const tasks = buildSearchQueries(config.minStars).map((query) => ({ query, page: 1 }));
+  let rawCount = 0;
+  let stopScheduling = false;
 
-  console.info(`Collecting candidates for ${config.target} repositories (minimum ${config.minStars} stars)`);
-  for (const query of buildSearchQueries(config.minStars)) {
-    for (let page = 1; page <= 10; page += 1) {
-      const items = await client.searchRepositories(query, page);
-      raw.push(...items);
-      console.info(`[${raw.length} raw] ${query} · page ${page} · ${items.length} results`);
-      if (items.length < 100 || raw.length >= desiredCandidates) break;
+  console.info(`Collecting candidates for ${config.target} repositories with ${config.concurrency} workers (minimum ${config.minStars} stars)`);
+  const worker = async () => {
+    while (true) {
+      const task = tasks.shift();
+      if (!task) return;
+      const items = await client.searchRepositories(task.query, task.page);
+      rawCount += items.length;
+      for (const item of items) if (isEligible(item, config.minStars)) candidates.set(item.id, item);
+      console.info(`[${rawCount} raw · ${candidates.size} unique eligible] ${task.query} · page ${task.page} · ${items.length} results`);
+      if (candidates.size >= desiredCandidates) stopScheduling = true;
+      if (!stopScheduling && items.length === 100 && task.page < 10) tasks.push({ query: task.query, page: task.page + 1 });
     }
-    if (raw.length >= desiredCandidates) break;
-  }
+  };
+  await Promise.all(Array.from({ length: config.concurrency }, worker));
 
-  const eligible = deduplicate(raw).filter((repository) => isEligible(repository, config.minStars));
+  const eligible = [...candidates.values()].sort((left, right) => left.id - right.id);
   const scored = scoreRepositories(eligible.map(normalizeRepository));
   const selected = selectDiverse(scored, config.target);
   if (selected.length === 0) throw new Error("No eligible repositories were collected; the existing universe file was not changed.");
@@ -49,7 +56,9 @@ async function main() {
 
   const universe = validateUniverse(generateUniverse(selected, await previousPositions(config.output)));
   await atomicWrite(config.output, universe);
+  const stats = client.getStats();
   console.info(`Wrote ${universe.total} repositories to ${config.output}`);
+  console.info(`Collector stats: ${stats.requests} requests · ${rawCount} raw · ${candidates.size} unique eligible · ${rawCount - candidates.size} duplicate/ineligible · ${Math.round(stats.rateLimitWaitMs / 1_000)}s rate-limit wait`);
 }
 
 main().catch((error: unknown) => {
