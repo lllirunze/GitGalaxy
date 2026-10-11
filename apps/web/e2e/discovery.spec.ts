@@ -21,3 +21,11 @@ test("opens search with the keyboard shortcut", async ({ page }) => {
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog", { name: "搜索 GitHub 项目" })).toBeHidden();
 });
+
+test("expands the data-driven language legend", async ({ page }) => {
+  await page.goto("/");
+  const legend = page.getByRole("region", { name: "编程语言颜色图例" });
+  await legend.getByRole("button", { name: /languages/i }).click();
+  await expect(legend.locator('span[title^="Go: "]')).toBeVisible();
+  await expect(legend.locator('span[title^="C: "]')).toBeVisible();
+});

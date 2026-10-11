@@ -1,11 +1,6 @@
 import type { GalaxyStar, Repository, UniverseData } from "../types.ts";
 import { stablePosition } from "./coordinates.ts";
-
-const COLORS: Record<string, string> = {
-  TypeScript: "#3178C6", JavaScript: "#F7DF1E", Python: "#4CAF50", Rust: "#DEA584",
-  Go: "#00ADD8", Java: "#E76F51", "C++": "#9B5DE5", "C#": "#68217A",
-  Swift: "#FA7343", Kotlin: "#B125EA",
-};
+import { repositoryLanguageColor } from "./colors.ts";
 
 function normalizeLog(value: number, min: number, max: number) {
   if (max <= min) return .5;
@@ -22,7 +17,7 @@ export function generateUniverse(repositories: Repository[], previousPositions =
     position: previousPositions.get(repository.id) ?? stablePosition(repository.id),
     appearance: {
       radius: Number((.6 + normalizeLog(repository.stars, starMin, starMax) * 2.9).toFixed(4)),
-      color: COLORS[repository.language ?? ""] ?? "#B8C0CC",
+      color: repositoryLanguageColor(repository.language),
       glowIntensity: Number((.25 + normalizeLog(repository.forks, forkMin, forkMax) * .75).toFixed(4)),
     },
     repository: {

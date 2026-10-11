@@ -13,6 +13,7 @@ function matches(star: GalaxyStar, query: string) {
 export function SearchPanel({ stars }: { stars: GalaxyStar[] }) {
   const setSearchOpen = useGalaxyStore((state) => state.setSearchOpen);
   const selectStar = useGalaxyStore((state) => state.selectStar);
+  const showLanguage = useGalaxyStore((state) => state.showLanguage);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,6 +28,7 @@ export function SearchPanel({ stars }: { stars: GalaxyStar[] }) {
   }, []);
   const choose = (star: GalaxyStar | undefined) => {
     if (!star) return;
+    showLanguage(star.repository.language ?? "Other");
     selectStar(star.id);
     setSearchOpen(false);
   };

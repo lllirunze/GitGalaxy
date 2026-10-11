@@ -1,11 +1,13 @@
 import { useEffect, useRef, type ElementRef } from "react";
 import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { GALAXY_CONFIG } from "@/galaxy/config";
 import { useGalaxyStore } from "@/stores/useGalaxyStore";
 import type { GalaxyStar } from "@/types/galaxy";
+import type { getGalaxyViewSettings } from "@/galaxy/utils/space";
 
-export function CameraController({ stars }: { stars: GalaxyStar[] }) {
+type GalaxyViewSettings = ReturnType<typeof getGalaxyViewSettings>;
+
+export function CameraController({ stars, view }: { stars: GalaxyStar[]; view: GalaxyViewSettings }) {
   const controlsRef = useRef<ElementRef<typeof OrbitControls>>(null);
   const cameraResetKey = useGalaxyStore((state) => state.cameraResetKey);
   const selectStar = useGalaxyStore((state) => state.selectStar);
@@ -27,11 +29,14 @@ export function CameraController({ stars }: { stars: GalaxyStar[] }) {
   });
 
   useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    controls.object.position.set(...view.initialCameraPosition);
+    controls.target.set(0, 0, 0);
+    controls.update();
     if (cameraResetKey === 0) return;
-    controlsRef.current?.object.position.set(...GALAXY_CONFIG.camera.initialPosition);
-    controlsRef.current?.reset();
     selectStar(null);
-  }, [cameraResetKey, selectStar]);
+  }, [cameraResetKey, selectStar, view]);
 
-  return <OrbitControls ref={controlsRef} makeDefault enableDamping dampingFactor={.055} enablePan={false} minDistance={GALAXY_CONFIG.camera.minDistance} maxDistance={GALAXY_CONFIG.camera.maxDistance} rotateSpeed={.55} zoomSpeed={.7} autoRotate autoRotateSpeed={.12} />;
+  return <OrbitControls ref={controlsRef} makeDefault enableDamping dampingFactor={.055} enablePan={false} minDistance={view.minCameraDistance} maxDistance={view.maxCameraDistance} rotateSpeed={.55} zoomSpeed={.7} autoRotate autoRotateSpeed={.12} />;
 }

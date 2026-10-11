@@ -4,6 +4,7 @@ import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { SceneStatus } from "@/components/layout/SceneStatus";
 import { TopBar } from "@/components/layout/TopBar";
 import { QualityControl } from "@/components/layout/QualityControl";
+import { LanguageLegend } from "@/components/layout/LanguageLegend";
 import { RepositoryPreview } from "@/components/discovery/RepositoryPreview";
 import { SearchPanel } from "@/components/discovery/SearchPanel";
 import { UniverseCanvas } from "@/galaxy/components/UniverseCanvas";
@@ -58,11 +59,7 @@ function App() {
         <p className="intro-description">{isLoading ? "正在载入开源项目星图。" : source === "live" ? `当前星图包含 ${universe.total.toLocaleString()} 个来自 GitHub 的开源项目。` : "未找到有效的项目数据，当前展示确定性模拟星图。"}</p>
       </motion.section>
 
-      <div className="scene-legend" aria-label="场景图例">
-        <span><i className="legend-dot legend-dot--blue" />TypeScript</span>
-        <span><i className="legend-dot legend-dot--gold" />JavaScript</span>
-        <span><i className="legend-dot legend-dot--green" />Python</span>
-      </div>
+      <LanguageLegend stars={universe.stars} />
       <div className="interaction-hint" aria-hidden="true"><span className="mouse-icon" />拖动旋转 · 滚轮缩放 · 点击恒星</div>
       <QualityControl effectiveQuality={quality.level} />
       {error && <p className="data-warning" role="status">数据加载失败，已切换为模拟星图。</p>}

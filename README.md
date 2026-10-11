@@ -129,18 +129,15 @@ Each version owns a separate documentation directory. The current release materi
 - The 5,000-record Universe and performance verification passed the formal release gate.
 - See the [release notes](docs/v1.0.0/release-notes.md) and [release checklist](docs/v1.0.0/release-checklist.md).
 
-### v1.0.1 — Planned 2026-10-11
+### v1.0.1 — Ready to release 2026-10-11
 
-- Replace the default browser tab icon with a GitGalaxy favicon.
-- Keep Galaxy density consistent as the Universe grows from 100 to 5,000 repositories.
-- Expand the language-color legend to represent every collected primary language.
-- See the [V1.0.1 optimization plan](docs/v1.0.1/development-plan.md).
+- Added a GitGalaxy browser-tab icon, data-scale-aware Galaxy space, and a complete expandable language-color legend.
+- Added a more spacious initial star field and per-language visibility controls.
+- Verification, CI, and GitHub Pages deployment are complete; the GitHub Release is ready to publish.
+- See the [V1.0.1 optimization plan](docs/v1.0.1/development-plan.md) and [unreleased notes](docs/v1.0.1/release-notes.md).
 
-### v1.0.2 — Planned 2026-10-11
-
-- Make initial production rendering show correct star colors without requiring a refresh.
-- Collect candidates through bounded, rate-aware concurrency while centrally de-duplicating by Repository ID.
-- See the [V1.0.2 optimization plan](docs/v1.0.2/development-plan.md).
+> [!NOTE]
+> Updates intentionally list only released versions and versions ready to release. Future plans are maintained in the [versioned documentation index](docs/README.md).
 
 ## 🤝 Contributing
 

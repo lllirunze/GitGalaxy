@@ -44,3 +44,6 @@ V1.0.0 发布后，项目进入稳定维护线，后续版本仅使用补丁版�
 - [V1.0.2 优化计划](v1.0.2/development-plan.md)
 - [V1.0.2 发布验收清单](v1.0.2/release-checklist.md)
 - [V1.0.2 发布说明草案](v1.0.2/release-notes.md)
+- [V1.0.3 国际化计划](v1.0.3/development-plan.md)
+- [V1.0.3 发布验收清单](v1.0.3/release-checklist.md)
+- [V1.0.3 发布说明草案](v1.0.3/release-notes.md)
