@@ -13,6 +13,7 @@ import { useGalaxyStore } from "@/stores/useGalaxyStore";
 
 export function UniverseCanvas({ onReady, stars, quality, qualityLevel }: { onReady: () => void; stars: GalaxyStar[]; quality: QualitySettings; qualityLevel: QualityLevel }) {
   const hiddenLanguages = useGalaxyStore((state) => state.hiddenLanguages);
+  const selectStar = useGalaxyStore((state) => state.selectStar);
   const spaceScale = useMemo(() => getGalaxySpaceScale(stars.length), [stars.length]);
   const view = useMemo(() => getGalaxyViewSettings(spaceScale), [spaceScale]);
   const visualStars = useMemo(() => filterStarsByLanguage(stars, hiddenLanguages).map((star) => ({
@@ -21,7 +22,7 @@ export function UniverseCanvas({ onReady, stars, quality, qualityLevel }: { onRe
     appearance: { ...star.appearance, color: displayLanguageColor(star.repository.language, star.appearance.color) },
   })), [hiddenLanguages, spaceScale, stars]);
 
-  return <Canvas className="universe-canvas" camera={{ position: view.initialCameraPosition, fov: 52, near: .1, far: view.farPlane }} dpr={quality.dpr} gl={{ antialias: quality.antialias, alpha: true, powerPreference: "high-performance" }} onCreated={({ gl }) => { gl.setClearColor("#02040b", 0); onReady(); }}>
+  return <Canvas className="universe-canvas" camera={{ position: view.initialCameraPosition, fov: 52, near: .1, far: view.farPlane }} dpr={quality.dpr} gl={{ antialias: quality.antialias, alpha: true, powerPreference: "high-performance" }} onCreated={({ gl }) => { gl.setClearColor("#02040b", 0); onReady(); }} onPointerMissed={() => selectStar(null)}>
     <fog attach="fog" args={["#02040b", view.fogNear, view.fogFar]} />
     <ambientLight intensity={.25} />
     <SpaceEnvironment quality={quality} spaceScale={spaceScale} />

@@ -10,6 +10,8 @@
 - Refined the legend into a compact data card with aligned language counts and an orderly expanded grid.
 - Added per-language visibility controls: all languages start selected, and deselecting one hides only its corresponding stars. Search reveals a hidden language again when its repository is selected.
 - Added deterministic colors for primary languages not in the curated palette, rather than rendering them as a single gray category.
+- Centered camera focus on the star's rendered position and added a luminous outer shell and wireframe edge for the selected star.
+- Made a click on empty universe space clear the current selection, matching the detail panel's close action.
 
 ## Verified
 

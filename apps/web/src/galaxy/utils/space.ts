@@ -1,5 +1,5 @@
 import type { GalaxyStar } from "@/types/galaxy";
-import { GALAXY_CONFIG } from "@/galaxy/config";
+import { GALAXY_CONFIG, STAR_FIELD_ROTATION } from "@/galaxy/config";
 
 export const DENSITY_REFERENCE_COUNT = 100;
 // Expands the rendered volume by almost 2× while retaining the same count-based scaling curve.
@@ -14,6 +14,18 @@ export function getGalaxySpaceScale(repositoryCount: number) {
 
 export function scalePosition(position: GalaxyStar["position"], scale: number): GalaxyStar["position"] {
   return { x: position.x * scale, y: position.y * scale, z: position.z * scale };
+}
+
+export function getRenderedStarPosition(position: GalaxyStar["position"]): GalaxyStar["position"] {
+  const [rotationX, rotationY, rotationZ] = STAR_FIELD_ROTATION;
+  const cosX = Math.cos(rotationX), sinX = Math.sin(rotationX);
+  const cosY = Math.cos(rotationY), sinY = Math.sin(rotationY);
+  const cosZ = Math.cos(rotationZ), sinZ = Math.sin(rotationZ);
+  return {
+    x: cosY * cosZ * position.x - cosY * sinZ * position.y + sinY * position.z,
+    y: (cosX * sinZ + sinX * sinY * cosZ) * position.x + (cosX * cosZ - sinX * sinY * sinZ) * position.y - sinX * cosY * position.z,
+    z: (sinX * sinZ - cosX * sinY * cosZ) * position.x + (sinX * cosZ + cosX * sinY * sinZ) * position.y + cosX * cosY * position.z,
+  };
 }
 
 export function getGalaxyViewSettings(spaceScale: number) {

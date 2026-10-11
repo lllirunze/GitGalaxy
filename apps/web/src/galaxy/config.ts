@@ -5,6 +5,8 @@ export const GALAXY_CONFIG = {
   starFieldRadius: 22,
 } as const;
 
+export const STAR_FIELD_ROTATION = [.08, -.2, -.06] as const;
+
 export type QualityLevel = "low" | "medium" | "high";
 
 export interface QualitySettings {

@@ -1,9 +1,10 @@
-import { useEffect, useRef, type ElementRef } from "react";
+import { useEffect, useMemo, useRef, type ElementRef } from "react";
 import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useGalaxyStore } from "@/stores/useGalaxyStore";
 import type { GalaxyStar } from "@/types/galaxy";
 import type { getGalaxyViewSettings } from "@/galaxy/utils/space";
+import { getRenderedStarPosition } from "@/galaxy/utils/space";
 
 type GalaxyViewSettings = ReturnType<typeof getGalaxyViewSettings>;
 
@@ -13,10 +14,11 @@ export function CameraController({ stars, view }: { stars: GalaxyStar[]; view: G
   const selectStar = useGalaxyStore((state) => state.selectStar);
   const selectedStarId = useGalaxyStore((state) => state.selectedStarId);
   const selectedStar = stars.find((star) => star.id === selectedStarId);
+  const selectedPosition = useMemo(() => selectedStar ? getRenderedStarPosition(selectedStar.position) : null, [selectedStar]);
 
   useFrame((state, delta) => {
-    if (!selectedStar || !controlsRef.current) return;
-    const { x, y, z } = selectedStar.position;
+    if (!selectedPosition || !controlsRef.current) return;
+    const { x, y, z } = selectedPosition;
     const smoothing = 1 - Math.exp(-delta * 3.5);
     const target = controlsRef.current.target;
     target.x += (x - target.x) * smoothing;
