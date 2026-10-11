@@ -1,7 +1,5 @@
 # GitGalaxy v1.0.3
 
-> 发布前草案：国际化实施和验收完成后更新为最终内容。
-
 ## Planned
 
 - Add English and Simplified Chinese support throughout the GitGalaxy interface.

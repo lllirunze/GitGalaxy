@@ -1,7 +1,5 @@
 # GitGalaxy v1.0.2
 
-> 发布前草案：实施和验收完成后更新为最终内容。
-
 ## Planned
 
 - Make the initial production render wait for validated Universe data so star colors are correct on first visit.

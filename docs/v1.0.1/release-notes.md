@@ -1,7 +1,5 @@
 # GitGalaxy v1.0.1
 
-> Unreleased — 2026-10-11. 本地实现和自动化验证已完成，等待 GitHub Pages 部署验收后发布。
-
 ## Changed
 
 - Replaced the default Vite browser-tab icon with a GitGalaxy planet-and-orbit favicon.
