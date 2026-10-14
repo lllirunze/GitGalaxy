@@ -27,4 +27,4 @@
 - [x] `pnpm test`、`pnpm collect:test`、`pnpm lint`、`pnpm build` 和 `pnpm test:e2e` 通过。
 - [x] CI 与 GitHub Pages 部署通过。
 - [x] README 更新记录与 `release-notes.md` 已更新。
-- [ ] 创建并发布 `v1.0.1` GitHub Release。
+- [x] 创建并发布 `v1.0.1` GitHub Release。

@@ -121,6 +121,19 @@ Each version owns a separate documentation directory. The current release materi
 
 ## 📝 Updates
 
+### v1.0.2 — 2026-10-14
+
+- Fixed first-visit star-color rendering by waiting for validated live Universe data before mounting the 3D scene.
+- Added bounded, rate-aware Collector scheduling with centralized Repository-ID aggregation and collection statistics.
+- See the [release notes](docs/v1.0.2/release-notes.md) and [release checklist](docs/v1.0.2/release-checklist.md).
+
+### v1.0.1 — 2026-10-11
+
+- Added a GitGalaxy browser-tab icon, data-scale-aware Galaxy space, and a complete expandable language-color legend.
+- Added a more spacious initial star field and per-language visibility controls.
+- Verification, CI, and GitHub Pages deployment are complete; the GitHub Release is ready to publish.
+- See the [V1.0.1 optimization plan](docs/v1.0.1/development-plan.md) and [unreleased notes](docs/v1.0.1/release-notes.md).
+
 ### v1.0.0 — 2026-10-11
 
 **Release validation complete.**
@@ -128,13 +141,6 @@ Each version owns a separate documentation directory. The current release materi
 - The first public release includes 3D exploration, data collection, search, quality modes, CI, and Pages deployment.
 - The 5,000-record Universe and performance verification passed the formal release gate.
 - See the [release notes](docs/v1.0.0/release-notes.md) and [release checklist](docs/v1.0.0/release-checklist.md).
-
-### v1.0.1 — Ready to release 2026-10-11
-
-- Added a GitGalaxy browser-tab icon, data-scale-aware Galaxy space, and a complete expandable language-color legend.
-- Added a more spacious initial star field and per-language visibility controls.
-- Verification, CI, and GitHub Pages deployment are complete; the GitHub Release is ready to publish.
-- See the [V1.0.1 optimization plan](docs/v1.0.1/development-plan.md) and [unreleased notes](docs/v1.0.1/release-notes.md).
 
 > [!NOTE]
 > Updates intentionally list only released versions and versions ready to release. Future plans are maintained in the [versioned documentation index](docs/README.md).
